@@ -6,14 +6,25 @@ export async function generateImage(prompt, options = {}) {
   try {
     const response = await fetch(`${API_CONFIG.baseUrl}/generate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, width, height })
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        width: width,
+        height: height
+      })
     });
 
-    if (!response.ok) throw new Error(`请求失败: ${response.status}`);
-    return await response.json();
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.detail || "API请求失败");
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("生成错误:", error);
+    console.error("生成错误：", error);
     throw error;
   }
 }
