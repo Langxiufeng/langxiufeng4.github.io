@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社区 - 链艺</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../assets/logo.jpg" type="image/svg+xml">
+    <style>
+        .community-container {
+            padding: 100px 0;
+            background-color: #f5f5f7;
+        }
+
+        .community-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .community-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .community-header p {
+            font-size: 18px;
+            color: #6e6e73;
+        }
+
+        .community-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .feed-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .feed-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f5f5f7;
+        }
+
+        .filter-tab.active {
+            background-color: #0071e3;
+            color: white;
+        }
+
+        .post {
+            border-bottom: 1px solid #e5e5ea;
+            padding: 20px 0;
+        }
+
+        .post:first-child {
+            padding-top: 0;
+        }
+
+        .post:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-author {
+            flex: 1;
+        }
+
+        .post-author h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+        }
+
+        .post-text {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .post-media {
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .post-media img {
+            width: 100%;
+            height: auto;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            color: #6e6e73;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 9999px;
+        }
+
+        .action-btn:hover {
+            background-color: #f5f5f7;
+            color: #0071e3;
+        }
+
+        .action-btn.liked {
+            color: #ff3b30;
+        }
+
+        .action-btn.bookmarked {
+            color: #ff9500;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sidebar-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .creator-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .creator-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .creator-info {
+            flex: 1;
+        }
+
+        .creator-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .creator-stats {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+
+        .follow-btn {
+            padding: 6px 12px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            border: 1px solid #e5e5ea;
+            border-radius: 9999px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .follow-btn:hover {
+            background-color: #e8e8ed;
+        }
+
+        .follow-btn.following {
+            background-color: #0071e3;
+            color: white;
+            border-color: #0071e3;
+        }
+
+        .trending-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .trending-tag {
+            padding: 8px 16px;
+            background-color: #f5f5f7;
+            border-radius: 9999px;
+            font-size: 14px;
+            color: #1d1d1f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .trending-tag:hover {
+            background-color: #e8e8ed;
+        }
+
+        @media (max-width: 768px) {
+            .community-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="../assets/logo.jpg" alt="链艺">
+                <span><strong>Artify</strong> <span style="font-size: 14px;">链艺</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">首页</a>
+                <a href="create.html">AI创作</a>
+                <a href="market.html">作品市场</a>
+                <a href="community.html" class="active">社区</a>
+            </div>
+            <div class="user-actions">
+                <button class="btn primary-btn" id="loginBtn">登录</button>
+                <button class="btn secondary-btn" id="registerBtn">注册</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 社区内容 -->
+    <div class="community-container">
+        <div class="container">
+            <div class="community-header">
+                <h1>社区</h1>
+                <p>与创作者互动，分享你的作品和想法</p>
+            </div>
+
+            <div class="community-content">
+                <!-- 动态 feed -->
+                <div class="feed-section">
+                    <div class="feed-header">
+                        <h2>社区动态</h2>
+                        <div class="filter-tabs">
+                            <div class="filter-tab active">全部</div>
+                            <div class="filter-tab">关注</div>
+                            <div class="filter-tab">热门</div>
+                            <div class="filter-tab">最新</div>
+                        </div>
+                    </div>
+
+                    <!-- 帖子 1 -->
+                    <div class="post">
+                        <div class="post-header">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20artist%20profile%20photo%2C%20minimalist%2C%20apple%20style&image_size=square"
+                                alt="创作者头像" class="post-avatar">
+                            <div class="post-author">
+                                <h4>艺术家1</h4>
+                                <span class="post-time">2小时前</span>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p class="post-text">刚刚完成了一组抽象艺术系列，使用了最新的AI模型，效果超出预期！大家觉得怎么样？</p>
+                            <div class="post-media">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20abstract%20art%20piece%2C%20minimalist%2C%20apple%20style&image_size=landscape_16_9"
+                                    alt="作品">
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn liked">
+                                <span>❤️</span>
+                                <span>128</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>💬</span>
+                                <span>24</span>
+                            </button>
+                            <button class="action-btn bookmarked">
+                                <span>🔖</span>
+                                <span>收藏</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>📤</span>
+                                <span>分享</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 帖子 2 -->
+                    <div class="post">
+                        <div class="post-header">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20artist%20profile%20photo%202%2C%20minimalist%2C%20apple%20style&image_size=square"
+                                alt="创作者头像" class="post-avatar">
+                            <div class="post-author">
+                                <h4>艺术家2</h4>
+                                <span class="post-time">5小时前</span>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p class="post-text">分享一个我最近创建的3D角色模型，使用了链艺的AI 3D生成工具，非常方便！</p>
+                            <div class="post-media">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=3D%20character%20model%2C%20minimalist%2C%20apple%20style&image_size=landscape_16_9"
+                                    alt="作品">
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn">
+                                <span>❤️</span>
+                                <span>96</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>💬</span>
+                                <span>18</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>🔖</span>
+                                <span>收藏</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>📤</span>
+                                <span>分享</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 帖子 3 -->
+                    <div class="post">
+                        <div class="post-header">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20artist%20profile%20photo%203%2C%20minimalist%2C%20apple%20style&image_size=square"
+                                alt="创作者头像" class="post-avatar">
+                            <div class="post-author">
+                                <h4>艺术家3</h4>
+                                <span class="post-time">昨天</span>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p class="post-text">尝试用AI生成了一段视频动画，效果还不错，分享给大家！</p>
+                            <div class="post-media">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=short%20video%20animation%20thumbnail%2C%20minimalist%2C%20apple%20style&image_size=landscape_16_9"
+                                    alt="作品">
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn">
+                                <span>❤️</span>
+                                <span>84</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>💬</span>
+                                <span>15</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>🔖</span>
+                                <span>收藏</span>
+                            </button>
+                            <button class="action-btn">
+                                <span>📤</span>
+                                <span>分享</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 侧边栏 -->
+                <div class="sidebar">
+                    <!-- 热门创作者 -->
+                    <div class="sidebar-section">
+                        <h3>热门创作者</h3>
+                        <div class="creator-item">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20artist%20profile%20photo%2C%20minimalist%2C%20apple%20style&image_size=square"
+                                alt="创作者头像" class="creator-avatar">
+                            <div class="creator-info">
+                                <div class="creator-name">艺术家1</div>
+                                <div class="creator-stats">24 作品 · 1.2k 粉丝</div>
+                            </div>
+                            <button class="follow-btn following">已关注</button>
+                        </div>
+                        <div class="creator-item">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20artist%20profile%20photo%202%2C%20minimalist%2C%20apple%20style&image_size=square"
+                                alt="创作者头像" class="creator-avatar">
+                            <div class="creator-info">
+                                <div class="creator-name">艺术家2</div>
+                                <div class="creator-stats">18 作品 · 856 粉丝</div>
+                            </div>
+                            <button class="follow-btn">关注</button>
+                        </div>
+                        <div class="creator-item">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20artist%20profile%20photo%203%2C%20minimalist%2C%20apple%20style&image_size=square"
+                                alt="创作者头像" class="creator-avatar">
+                            <div class="creator-info">
+                                <div class="creator-name">艺术家3</div>
+                                <div class="creator-stats">15 作品 · 623 粉丝</div>
+                            </div>
+                            <button class="follow-btn">关注</button>
+                        </div>
+                    </div>
+
+                    <!-- 热门标签 -->
+                    <div class="sidebar-section">
+                        <h3>热门标签</h3>
+                        <div class="trending-tags">
+                            <div class="trending-tag">#AI创作</div>
+                            <div class="trending-tag">#抽象艺术</div>
+                            <div class="trending-tag">#3D模型</div>
+                            <div class="trending-tag">#视频动画</div>
+                            <div class="trending-tag">#音乐制作</div>
+                            <div class="trending-tag">#赛博朋克</div>
+                            <div class="trending-tag">#未来主义</div>
+                            <div class="trending-tag">#数字艺术</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <img src="../assets/logo.jpg" alt="链艺">
+                        <span><strong>Artify</strong> <span style="font-size: 14px;">链艺</span></span>
+                    </div>
+                    <p>AI驱动的创作社区，释放你的创造力</p>
+                </div>
+                <div class="footer-section">
+                    <h4>功能</h4>
+                    <ul>
+                        <li><a href="create.html">AI创作</a></li>
+                        <li><a href="market.html">作品市场</a></li>
+                        <li><a href="community.html">社区</a></li>
+                        <li><a href="profile.html">个人中心</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>支持</h4>
+                    <ul>
+                        <li><a href="#">帮助中心</a></li>
+                        <li><a href="#">使用教程</a></li>
+                        <li><a href="#">联系我们</a></li>
+                        <li><a href="#">隐私政策</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 <strong>Artify</strong> <span style="font-size: 14px;">链艺</span>. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>登录</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" placeholder="请输入邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" placeholder="请输入密码">
+                    </div>
+                    <button type="submit" class="btn primary-btn full-width">登录</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>注册</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regName">用户名</label>
+                        <input type="text" id="regName" placeholder="请输入用户名">
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">邮箱</label>
+                        <input type="email" id="regEmail" placeholder="请输入邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">密码</label>
+                        <input type="password" id="regPassword" placeholder="请输入密码">
+                    </div>
+                    <button type="submit" class="btn primary-btn full-width">注册</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // 社区互动功能
+        document.addEventListener('DOMContentLoaded', function () {
+            // 筛选标签切换
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // 关注按钮切换
+            const followButtons = document.querySelectorAll('.follow-btn');
+            followButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (this.classList.contains('following')) {
+                        this.classList.remove('following');
+                        this.textContent = '关注';
+                    } else {
+                        this.classList.add('following');
+                        this.textContent = '已关注';
+                    }
+                });
+            });
+
+            // 点赞按钮切换
+            const likeButtons = document.querySelectorAll('.action-btn');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (this.querySelector('span').textContent === '❤️') {
+                        if (this.classList.contains('liked')) {
+                            this.classList.remove('liked');
+                            const count = parseInt(this.querySelectorAll('span')[1].textContent);
+                            this.querySelectorAll('span')[1].textContent = count - 1;
+                        } else {
+                            this.classList.add('liked');
+                            const count = parseInt(this.querySelectorAll('span')[1].textContent);
+                            this.querySelectorAll('span')[1].textContent = count + 1;
+                        }
+                    } else if (this.querySelector('span').textContent === '🔖') {
+                        if (this.classList.contains('bookmarked')) {
+                            this.classList.remove('bookmarked');
+                            this.querySelectorAll('span')[1].textContent = '收藏';
+                        } else {
+                            this.classList.add('bookmarked');
+                            this.querySelectorAll('span')[1].textContent = '已收藏';
+                        }
+                    }
+                });
+            });
+
+            // 热门标签点击事件
+            const trendingTags = document.querySelectorAll('.trending-tag');
+            trendingTags.forEach(tag => {
+                tag.addEventListener('click', function () {
+                    alert(`查看标签 ${this.textContent} 的内容`);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
